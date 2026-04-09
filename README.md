@@ -30,7 +30,7 @@ The dataset is highly imbalanced, making traditional accuracy metrics unreliable
 
 * Train/test split with stratification
 * Feature scaling using StandardScaler
-* Handling class imbalance using SMOTE
+* Handling class imbalance using SMOTE (applied only on train set to avoid data leakage)
 
 ### 2. Models Trained
 
@@ -47,6 +47,14 @@ Due to class imbalance, the following metrics were used:
 * F1-score
 * ROC AUC
 * PR AUC (most relevant)
+
+### 4. Cross-Validation
+
+5-fold stratified cross-validation using an SMOTE + XGBoost pipeline to ensure reliable performance estimates across different data splits.
+
+### 5. Model Export
+
+Trained model and scaler serialized with `joblib` for deployment in a real-time scoring pipeline.
 
 ---
 
@@ -96,6 +104,26 @@ Model performance can be adjusted by changing the classification threshold:
 * Higher threshold → higher precision (fewer false positives)
 
 This allows alignment with business priorities.
+
+---
+
+## 💼 Business Impact
+
+Fraud detection involves a direct financial trade-off:
+
+| Event | Estimated Cost |
+|---|---|
+| Undetected fraud (False Negative) | Full transaction value lost + chargeback fee (~$25–$50) |
+| Legitimate transaction blocked (False Positive) | Customer friction, potential churn (~$5–$15 per incident) |
+
+**With XGBoost at threshold 0.5 (per 56,962 test transactions):**
+
+* 15 frauds missed → estimated loss: ~15 × avg fraud amount
+* 31 legitimate transactions blocked → estimated friction cost: ~31 × $10 = $310
+
+Lowering the threshold to 0.3 catches more fraud but increases blocked legitimate transactions — the right threshold depends on the cost structure of each business.
+
+This model enables data-driven threshold selection rather than arbitrary rule-based blocking.
 
 ---
 

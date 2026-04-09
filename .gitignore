@@ -9,3 +9,6 @@ __pycache__/
 *.pyc
 *.pyo
 .env
+
+# Saved models
+*.pkl
