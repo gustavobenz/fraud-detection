@@ -1,0 +1,11 @@
+# Dataset (too large for git)
+creditcard.csv
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.env
